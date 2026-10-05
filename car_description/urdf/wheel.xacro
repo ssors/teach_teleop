@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="shturl.cc/ALHqZQqzXh7XlT8R4Nh">
+
+  <!-- ============================================================
+       车轮宏（改进版v2）：四个轮子分别用独立连接件接到底盘
+       固定轮距y=0.0775，车轮内侧距离底盘侧面严格1cm
+       ============================================================ -->
+
+
+  <!-- ================ 前左轮 ================ -->
+  <link name="steer_left_link">
+        <inertial>
+            <origin xyz="0 0.008 0" rpy="0 0 0" />
+            <mass value="${mass_steer_link}" />
+            <inertia
+                ixx="${mass_steer_link/12*(3*wheel_radius*wheel_radius + wheel_width*wheel_width)}"
+                ixy="0" ixz="0"
+                iyy="${mass_steer_link/12*(3*wheel_radius*wheel_radius + wheel_width*wheel_width)}"
+                iyz="0" izz="${mass_steer_link/2 * wheel_radius*wheel_radius}" />
+        </inertial>
+    </link>
+    <joint name="steer_left_joint" type="revolute">
+        <origin xyz="0.0575 0.0775 -0.014" rpy="0 0 0" />
+        <parent link="chassis_link" />
+        <child link="steer_left_link" />
+        <axis xyz="0 0 1" />
+        <limit upper="${max_steer_angle}" lower="${-max_steer_angle}" effort="${steer_effort}" velocity="${steer_velocity}" />
+    </joint>
+    <link name="front_left_wheel_link">
+        <inertial>
+            <origin xyz="0 0 -0.008" rpy="0 0 0" />
+            <mass value="${mass_wheel_front}" />
+            <inertia
+                ixx="${mass_wheel_front/12*(3*wheel_radius*wheel_radius + wheel_width*wheel_width)}"
+                ixy="0" ixz="0"
+                iyy="${mass_wheel_front/12*(3*wheel_radius*wheel_radius + wheel_width*wheel_width)}"
+                iyz="0" izz="${mass_wheel_front/2 * wheel_radius*wheel_radius}" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+            </geometry>
+            <material name="">
+                <color rgba="0.223529411764706 0.223529411764706 0.223529411764706 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="front_left_wheel_joint" type="continuous">
+        <origin xyz="0 0 0" rpy="1.5708 0 0" />
+        <parent link="steer_left_link" />
+        <child link="front_left_wheel_link" />
+        <axis xyz="0 0 -1" />
+        <dynamics friction="${wheel_joint_friction}" damping="${wheel_joint_damping}" />
+        <limit effort="${wheel_effort}" velocity="${wheel_velocity}" />
+    </joint>
+
+
+
+    <!-- ================ 前右轮 ================ -->
+    <link name="steer_right_link">
+        <inertial>
+            <origin xyz="0 -0.008 0" rpy="0 0 0" />
+            <mass value="${mass_steer_link}" />
+            <inertia
+                ixx="${mass_steer_link/12*(3*wheel_radius*wheel_radius + wheel_width*wheel_width)}"
+                ixy="0" ixz="0"
+                iyy="${mass_steer_link/12*(3*wheel_radius*wheel_radius + wheel_width*wheel_width)}"
+                iyz="0" izz="${mass_steer_link/2 * wheel_radius*wheel_radius}" />
+        </inertial>
+    </link>
+    <joint name="steer_right_joint" type="revolute">
+        <origin xyz="0.0575 -0.0775 -0.014" rpy="0 0 0" />
+        <parent link="chassis_link" />
+        <child link="steer_right_link" />
+        <axis xyz="0 0 1" />
+        <limit upper="${max_steer_angle}" lower="${-max_steer_angle}" effort="${steer_effort}" velocity="${steer_velocity}" />
+
+    </joint>
+    <link name="front_right_wheel_link">
+        <inertial>
+            <origin xyz="0 0 -0.008" rpy="0 0 0" />
+            <mass value="${mass_wheel_front}" />
+            <inertia
+                ixx="${mass_wheel_front/12*(3*wheel_radius*wheel_radius + wheel_width*wheel_width)}"
+                ixy="0" ixz="0"
+                iyy="${mass_wheel_front/12*(3*wheel_radius*wheel_radius + wheel_width*wheel_width)}"
+                iyz="0" izz="${mass_wheel_front/2 * wheel_radius*wheel_radius}" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+            </geometry>
+            <material name="">
+                <color rgba="0.223529411764706 0.223529411764706 0.223529411764706 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="front_right_wheel_joint" type="continuous">
+        <origin xyz="0 0 0" rpy="-1.5708 0 0" />
+        <parent link="steer_right_link" />
+        <child link="front_right_wheel_link" />
+        <axis xyz="0 0 1" />
+        <dynamics friction="${wheel_joint_friction}" damping="${wheel_joint_damping}" />
+        <limit effort="${wheel_effort}" velocity="${wheel_velocity}" />
+    </joint>
+
+
+    <!-- ================ 后左轮 ================ -->
+    <link name="rear_left_wheel_link">
+        <inertial>
+            <origin xyz="0 0 -0.008" rpy="0 0 0" />
+            <mass value="${mass_wheel_rear}" />
+            <inertia
+                ixx="${mass_wheel_rear/12*(3*wheel_radius*wheel_radius + wheel_width*wheel_width)}"
+                ixy="0" ixz="0"
+                iyy="${mass_wheel_rear/12*(3*wheel_radius*wheel_radius + wheel_width*wheel_width)}"
+                iyz="0" izz="${mass_wheel_rear/2 * wheel_radius*wheel_radius}" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+            </geometry>
+            <material name="">
+                <color rgba="0.37647 0.37647 0.37647 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rear_left_wheel_joint" type="continuous">
+        <origin xyz="-0.0775 0.0775 -0.014" rpy="1.5708 0 0" />
+        <parent link="chassis_link" />
+        <child link="rear_left_wheel_link" />
+        <axis xyz="0 0 -1" />
+        <dynamics friction="${wheel_joint_friction}" damping="${wheel_joint_damping}" />
+        <limit effort="${wheel_effort}" velocity="${wheel_velocity}" />
+    </joint>
+
+    <!-- ================ 后右轮 ================ -->
+    <link name="rear_right_wheel_link">
+        <inertial>
+            <origin xyz="0 0 -0.008" rpy="0 0 0" />
+            <mass value="${mass_wheel_rear}" />
+            <inertia
+                ixx="${mass_wheel_rear/12*(3*wheel_radius*wheel_radius + wheel_width*wheel_width)}"
+                ixy="0" ixz="0"
+                iyy="${mass_wheel_rear/12*(3*wheel_radius*wheel_radius + wheel_width*wheel_width)}"
+                iyz="0" izz="${mass_wheel_rear/2 * wheel_radius*wheel_radius}" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+            </geometry>
+            <material name="">
+                <color rgba="0.37647 0.37647 0.37647 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rear_right_wheel_joint" type="continuous">
+        <origin xyz="-0.0775 -0.0775 -0.014" rpy="-1.5708 0 0" />
+        <parent link="chassis_link" />
+        <child link="rear_right_wheel_link" />
+        <axis xyz="0 0 1" />
+        <dynamics friction="${wheel_joint_friction}" damping="${wheel_joint_damping}" />
+        <limit effort="${wheel_effort}" velocity="${wheel_velocity}" />
+    </joint>
+
+
+</robot>
